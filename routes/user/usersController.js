@@ -1,5 +1,9 @@
 const User = require("./usersModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const createUser = async (userData) => {
   try {
@@ -53,8 +57,20 @@ const loginUser = async (userData) => {
         throw "Incorrect password"
     }
 
+    // jwt.sign({ payload }, secretKey)
+    // creates a token utilizing our user data
+    // we sign the token with our data!
+
+    // payload - data you want to store in the token (can be whatever you want!)
+
+    // secretKey - encrypted string that we setup in our .env that is sepcific to our application.  used to verify that the token is generated from our app
+
+    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET_KEY)
+
+    // console.log(`token: ${token}`)
+
     // if they do, return true!
-    return user;
+    return token;
 
   } catch (error) {
     throw error;
